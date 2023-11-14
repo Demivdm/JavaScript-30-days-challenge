@@ -44,12 +44,15 @@
         <kbd>8</kbd>
         <span class="sound">8</span>
       </div>
+      <!-- audio data key moet overeen komen met de audio data-key -->
       <div data-key="105" class="key">
         <kbd>9</kbd>
         <span class="sound">9</span>
       </div>
     </div>
 
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/clap.wav"></audio>
     <audio data-key="96" src="sounds/clap.wav"></audio>
     <audio data-key="97" src="sounds/hihat.wav"></audio>
     <audio data-key="99" src="sounds/kick.wav"></audio>
@@ -61,8 +64,12 @@
     <audio data-key="105" src="sounds/tink.wav"></audio>
 
     <script>
+      <!-- event listener toegevoegd op het klikken van de knoppen -->
       window.addEventListener("keydown", function (event) {
-        const audio = document.querySelectorAll("audio");
+        const audio = document.querySelectorAll(
+          `audio[data-key="${event.keyCode}"]`
+        );
+        console.log(audio);
       });
     </script>
   </body>
