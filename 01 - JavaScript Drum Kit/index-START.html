@@ -8,23 +8,23 @@
   </head>
   <body>
     <div class="keys">
-      <div data-key="65" class="key">
+      <div data-key="96" class="key">
         <kbd>0</kbd>
         <span class="sound">0</span>
       </div>
-      <div data-key="83" class="key">
+      <div data-key="97" class="key">
         <kbd>1</kbd>
         <span class="sound">1</span>
       </div>
-      <div data-key="96" class="key">
+      <div data-key="98" class="key">
         <kbd>2</kbd>
         <span class="sound">2</span>
       </div>
-      <div data-key="97" class="key">
+      <div data-key="99" class="key">
         <kbd>3</kbd>
         <span class="sound">3</span>
       </div>
-      <div data-key="99" class="key">
+      <div data-key="100" class="key">
         <kbd>4</kbd>
         <span class="sound">4</span>
       </div>
@@ -50,27 +50,43 @@
         <span class="sound">9</span>
       </div>
     </div>
-
-    <audio data-key="65" src="sounds/clap.wav"></audio>
-    <audio data-key="83" src="sounds/clap.wav"></audio>
+<!-- data key is een toegewezen attribute -->
     <audio data-key="96" src="sounds/clap.wav"></audio>
-    <audio data-key="97" src="sounds/hihat.wav"></audio>
-    <audio data-key="99" src="sounds/kick.wav"></audio>
-    <audio data-key="100" src="sounds/openhat.wav"></audio>
-    <audio data-key="101" src="sounds/boom.wav"></audio>
-    <audio data-key="102" src="sounds/ride.wav"></audio>
-    <audio data-key="103" src="sounds/snare.wav"></audio>
-    <audio data-key="104" src="sounds/tom.wav"></audio>
-    <audio data-key="105" src="sounds/tink.wav"></audio>
+    <audio data-key="97" src="sounds/tink.wav"></audio>
+    <audio data-key="98" src="sounds/clap.wav"></audio>
+    <audio data-key="99" src="sounds/hihat.wav"></audio>
+    <audio data-key="100" src="sounds/kick.wav"></audio>
+    <audio data-key="101" src="sounds/openhat.wav"></audio>
+    <audio data-key="102" src="sounds/boom.wav"></audio>
+    <audio data-key="103" src="sounds/ride.wav"></audio>
+    <audio data-key="104" src="sounds/snare.wav"></audio>
+    <audio data-key="105" src="sounds/tom.wav"></audio>
 
     <script>
-      <!-- event listener toegevoegd op het klikken van de knoppen -->
-      window.addEventListener("keydown", function (event) {
-        const audio = document.querySelectorAll(
-          `audio[data-key="${event.keyCode}"]`
-        );
-        console.log(audio);
-      });
-    </script>
+
+  function playSound(event){
+   
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+
+    if(!audio) return; // stop the function from running
+   audio.currentTime = 0; // rewind to the start
+   audio.play();
+
+   key.classList.add('playing');
+   
+  }
+
+  function removeTransition(event){
+    if(event.propertyName !== 'transform' ) return; // sskip if not transform
+    console.log(event.propertyName)
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll(".key")
+  // check of er iets transitioned, als dat gebeurd dat wordt de removetransition functie gevuurd
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound);
+   </script>
   </body>
 </html>
