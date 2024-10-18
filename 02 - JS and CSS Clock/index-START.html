@@ -89,7 +89,7 @@
         minutesHand.style.transform = `rotate(${minutesDegrees}deg)`;
         hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
 
-        console.log(hours, minutes, seconds);
+        console.log(hours+":"+ minutes+":"+seconds);
         if (seconds === 0) {
           // haalt de transition eraf
           hands.forEach((hand) => (hand.style.transition = "none"));
