@@ -14,9 +14,69 @@
       <li>Filter for a city</li>
       <li>or a state</li>
     </ul>
+    <span class="no-match">We didn't find anything, did you spell that correct?</span>
   </form>
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const cities = [];
+// fetch haalt de data uit de endpoint als een promise op
+fetch(endpoint)
+//je gebruikt then om in de promise te gaan en arrow function om blob in json te veranderen
+  //hier komt ook weer een promise uit met  
+  .then(blob => blob.json())
+  //hier komt de data uit
+  //dit push je in de variabele als individuele items met de ...
+  .then(data => cities.push(...data))
+function findMatches(wordMatch, cities){
+ const matches = cities.filter(place =>{
+    //gi staat voor global en insensitive. het heeft te maken met de manier van zoeken
+    const regex = new RegExp(wordMatch, 'gi')
+    return place.city.match(regex) || place.state.match(regex)
+
+  } );
+//een poging tot een fallback
+  if (matches.length === 0) {
+  const noMatches = document.querySelector('.no-match');
+
+    noMatches.style.display = 'block';
+    suggestions.innerHTML = '';
+  }
+  return matches
+}
+
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function displyMatches(){
+  const matchArray = findMatches(this.value, cities)
+  //waarom eerst een variabele maken en het niet meteen in suggestions gooien?
+  const html = matchArray.map(place =>{
+    //this.value is hierbij de user input
+    const regex = new RegExp(this.value, 'gi');
+  //vervangt het gezochte woord door de user input met extra styling
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+   
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+      </li>
+    `;
+    // de join veranderd het van een array naar een string
+  }).join('')
+  suggestions.innerHTML = html
+}
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displyMatches)
+//keyup is iedere keer dat er een toets wordt ingedrukt
+searchInput.addEventListener('keyup', displyMatches)
+//wacht tot de domcontent is geladen
+
 
 </script>
 </body>
