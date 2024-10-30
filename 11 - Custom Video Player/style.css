@@ -160,3 +160,6 @@ input[type=range]::-moz-range-thumb {
   background: #ffc600;
   cursor: pointer;
 }
+.player, .viewer {
+  transition: width 0.5s ease, height 0.5s ease; /* Add transition to width and height */
+}
