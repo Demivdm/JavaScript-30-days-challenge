@@ -44,6 +44,9 @@
   </div>
 
   <script>
+    //dit zorgt ervoor dat de functie maar een maximaal aantal keer wordt uitgevoerd
+    // dit is beter voor de performance
+    // als je een onscroll gebruikt is het handig om ook voer debounce na te denken
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -58,7 +61,31 @@
         if (callNow) func.apply(context, args);
       };
     }
+    
+    const sliderImages = document.querySelectorAll('.slide-in')
 
+    function checkSlide(e){
+      sliderImages.forEach( sliderImage =>{
+        //om de onderkant van het scherm te detecteren
+        //hoeveelheid pixels vanaf de onderkant van het scherm
+        // daarna de sliderimage delen door 2 om de helft van de image te berekenen
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height /2;
+        //om te checken of de afbeelding nog  in beeld is
+        // offsetTop kijkt hoe ver de image van de bovenkant van het scherm af is
+        const imageBottom = sliderImage.offsetTop + sliderImage.height
+        const ifHalfShown = slideInAt > sliderImage.offsetTop
+        const isNotScrolledPast = window.scrollY < imageBottom
+
+        if(ifHalfShown && isNotScrolledPast){
+          sliderImage.classList.add('active')
+        }else{
+          sliderImage.classList.remove('active')
+
+        }
+      })
+
+    }
+    window.addEventListener('scroll',debounce(checkSlide))
   </script>
 
   <style>
