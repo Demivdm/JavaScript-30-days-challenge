@@ -24,13 +24,136 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button class="remove">Remove all</button>
+    <button class="check">check/uncheck all</button>
+
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  //checkt eerst of er iets in de local storage zit anders is het een lege array
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  const remove = document.querySelector('.remove')
+  const check = document.querySelector('.check')
+  
 
+// deze functie voegt items toe aan de array maar er wordt nog niks opgeslagen in de localstorage
+  function addItem(e){
+    // voorkom dat de pagina herlaad als er een item wordt toegevoegd
+    e.preventDefault()
+    // this werkt in dit geval omdat de functie op het gehele formulier zit en gaat zoeken naar name
+    // door de value op te vragen krijg je wat in name attribuut zit
+    const text =  (this.querySelector('[name=item]')).value
+    //object aanmaken om het item en de eigenschappen in op te slaan
+    const item = {
+      text: text,
+      done: false
+    }
+    // vul de array
+    items.push(item)
+    //geef de items en de items list door aan de populatelist functie
+    populateList(items, itemsList)
+    //local storage accepteert alleen strings dus de array met objecten moet veranderd worden in een string
+    localStorage.setItem('items', JSON.stringify(items))
+    //leegt het formulier
+    this.reset()
+  }
+//plates is nu standaard leeg zodat er niks breekt wanneer er niks aan wordt toevoegd
+// platesList is waar de html wordt geinjecteerd 
+function populateList(plates = [], platesList){
+  //er worden objecten ingevoerd en we willen met map een string terug krijgen
+  platesList.innerHTML = plates.map((plate, i) =>{
+    //input wordt aan label gekoppeld door de for in te vullen met hetzelfde id als de input
+    // dit zorgt ervoor dat je ook de input box kan checken door op het label te klikken
+
+     return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    console.log(plate.done)
+    //de join veranderd de array met string is 1 lange string
+  }).join('')
+
+  }
+
+  function toggleDone(e){
+    // skip behalve als het een input is
+    if(!e.target.matches('input')) return
+    const element = e.target
+    // zo weet je hoeveelste item het in je array is
+    const index = element.dataset.index
+    //toggle
+    items[index].done = !items[index].done
+    //items weer als string in array plaatsen
+    localStorage.setItem('items', JSON.stringify(items))
+
+    //items weer aan de lijst toevoegen?
+    populateList(items, itemsList)
+
+  }
+
+  //mijn orginele oplossing
+  // dit werkt niet omdat ik alleen 1 item target met de input match
+  // daarnaast moet ik de array weer updaten 
+  // function checkAll(e){
+  //   if(!e.target.matches('input')) return
+  //   const element = e.target
+  //   element.checked = this.checked
+  //   console.log('checked it')
+
+  // }
+
+  function checkAll() {
+  // alle items naar true zetten
+  items.forEach(item =>{
+    item.done = !item.done
+  } );
+
+  // Update localStorage met een array
+  localStorage.setItem('items', JSON.stringify(items));
+
+  // update de lijst
+  populateList(items, itemsList);
+
+  console.log('All items checked');
+}
+
+  function removeAll(e){
+    //om te zorgen dat localstorage niet meteen wordt geleegd
+  
+    localStorage.clear()
+    // leeg arra y lijst
+    items.length = 0
+    
+    //leeg de string lijst
+    itemsList.innerHTML = '';
+
+    //lege lijst weer terug plaatsen
+    populateList(items, itemsList)
+    console.log('removed')
+
+    //het werkt maar alleen op reload??
+    // het probleem was een spelfout in lengththt
+
+
+  }
+
+  // in dit geval is submit beter dan click omdat de gebruiker dan ook met enter items kan toevoegen
+  addItems.addEventListener('submit', addItem)
+  itemsList.addEventListener('click', toggleDone)
+  remove.addEventListener('click', removeAll)
+  check.addEventListener('click', checkAll)
+
+
+
+// waarom populate list in de additem functie en aan het einde?
+  populateList(items, itemsList)
+
+//event delegation is dat je een event listener op een parent zet en de parent het event laat doorgeven aan een van de kinderen
+// dit is dynamischer omdat het dan niet stuk gaat als er kinderen bij of af gaan
 </script>
 
 
