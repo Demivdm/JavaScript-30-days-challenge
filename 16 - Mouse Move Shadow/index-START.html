@@ -36,6 +36,43 @@
   </style>
 
 <script>
+  const hero = document.querySelector('.hero')
+  const text = document.querySelector('h1')
+
+  // hoe ver er gestretcht moet worden
+  const walk = 100
+
+  function shadow(e){
+    const width = hero.offsetWidth
+    const height = hero.offsetHeight
+    // met es6 kan het korter worden geschreven
+    //persoonlijk vind ik dit onleesbaar
+    // het voelt verkeerd om
+    // const {offsetWidth: width, offsetHeight: height} = hero
+    let x = e.offsetX
+    let y = e.offsetY
+    //hieronder de onleesbare versie
+    // let {offsetX: x, offsetY: y} = e
+    console.log(x,y)
+
+// this is het ding waar je naar luistert -  in dit geval hero
+// e.target is de trigger -  in dit geval mousemove
+if(this !== e.target){
+// als this en target niet hetzelfde zijn wordt de if statement uitgevoerd
+//voegt de hoeveelheid pixels vanaf top en left toe als er over iets wordt bewogen wat niet de target is
+x = x + e.target.offsetLeft
+y = y + e.target.offsetTop
+}
+// x en y zijn relatief aan de hero container
+// door te delen door de width of height komt er een getal tussen de 0 en 1 uit
+// keer walk is de shadow offset
+// /2 zorgt ervoor dat het vanuit het midden wordt gedaan en er niet vanaf de rand 100 px wordt gepakt
+const xWalk = Math.round((x / width * walk) - (walk / 2))
+const yWalk = Math.round((y / height * walk) - (walk / 2))
+
+text.style.textShadow = `${xWalk}px ${yWalk}px 0 hotpink `
+  }
+hero.addEventListener('mousemove' , shadow)
 </script>
 </body>
 </html>
