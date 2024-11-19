@@ -50,6 +50,29 @@
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
 
 
+// const sortedBands =  bands.sort()
+const bandList = document.getElementById('bands')
+
+function strip(bandName){
+  //gebruik regex om de voorkant eraf te halen
+  // trim op de spaties weg te halen
+  return bandName.replace(/^(a |an |the)/i, '').trim()
+}
+const sortedBands =  bands.sort((a,b) => strip(a) > strip(b) ? 1 : -1)
+
+// bijna goed maar alle elementen worden niet als individueel gezien
+// als je door sortedbands loopt wordt er wel naar ieder item gekeken
+// let e = document.createElement('li')
+// e.innerHTML = sortedBands
+// bandList.appendChild(e)
+sortedBands.forEach(band => {
+    let e = document.createElement('li');
+    //text content is veiliger dan innerHTML
+    e.textContent = band; 
+    bandList.appendChild(e);
+});
+
+
 </script>
 
 </body>
