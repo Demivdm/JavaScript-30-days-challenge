@@ -13,6 +13,22 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  // dit zorgt ervoor dat er constant wordt geupdate en je niet hoeft te stoppen met praten voor er ites wordt geupdate
+  const recognition = new SpeechRecognition()
+  recognition.interimResults = true;
+
+  
+  let p = document.createElement('p')
+  const words = document.querySelector('.words')
+  //voeg de paragraaf toe in de words div
+  words.appendChild(p)
+
+  recognition.addEventListener('result', e =>{
+    console.log(e.results)
+    const transcript = Array.from(e.results)
+    .map(result => result[0])
+  })
+  recognition.start()
 
 </script>
 
