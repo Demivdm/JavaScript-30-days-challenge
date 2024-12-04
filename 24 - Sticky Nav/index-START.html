@@ -55,6 +55,23 @@
   </div>
 
 <script>
+    const nav = document.querySelector('#main');
+    let topOfNav = nav.offsetTop;
+
+    function fixNav(){
+      if(window.scrollY >= topOfNav){
+        // door fixed neemt de nav geen ruimte meer in en verspringt de content
+        // om dit te voorkomen voegen we een offset toe
+        document.body.style.paddingTop = nav.offsetHeight + 'px'
+        document.body.classList.add('fixed-nav')
+      }else{
+        document.body.style.paddingTop = 0
+
+        document.body.classList.remove('fixed-nav')
+
+      }
+    }
+    window.addEventListener('scroll', fixNav)
 
 </script>
 
