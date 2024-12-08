@@ -43,6 +43,20 @@
 
 <button></button>
 <script>
+const divs = document.querySelectorAll('div')
+ function logTxt(e){
+  console.log(this.classList.value)
+  // door stop propagation wordt er niet verder omhoog gebubbelt
+  // e.stopPropagation()
+ }
+//bubbling is dat de browser ook op de bovenste geneste items klikt
+// clcik wordt toegevoegd op alle andere elementen maar je ziet het niet omdat je er niet naar luistert
+ divs.forEach(div => div.addEventListener('click', logTxt,{
+  //once luistert eenmalig naar een event en verwijdert daarna de evenlistener
+once: true 
+}))
+ //daarna wordt er van binnen uit naar buiten gebubbelt
+ //standaard wordt er bubbling gebruikt, maar als je caputre: true gebruikt wordt de functie van buiten naar binnen gerunt.
 
 </script>
 </body>
