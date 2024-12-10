@@ -16,6 +16,26 @@
   </div>
 
 <script>
+    const speed = document.querySelector('.speed');
+  const bar = speed.querySelector('.speed-bar');
+  const video = document.querySelector('.flex');
+
+  speed.addEventListener('mousemove', function(e){
+    // hoe ver je binnen de bar bent
+    const y = e.pageY - this.offsetTop
+    //omzetten naar percentages
+    const percent = y / this.offsetHeight
+    // hoe snel of langzaaam de video kan?
+    const min = 0.4
+    const max = 4
+    const height = Math.round(percent * 100) + '%'
+    // hoe snel de video gaat
+    const playbackRate = percent * (max-min) + min
+    bar.style.height = height
+    // tofixed bepaald hoeveel cijfers achter de komma
+    bar.textContent = playbackRate.toFixed(2) + 'x'
+    video.playbackRate = playbackRate
+  })
 </script>
 </body>
 </html>
