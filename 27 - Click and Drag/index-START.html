@@ -36,6 +36,43 @@
   </div>
 
 <script>
+  const slider = document.querySelector('.items');
+  let isDown = false;
+  // hebben nog geen waarden, dit wordt toegevoegd binnen de events
+  let startX;
+  let scrollLeft;
+  //function inline in de eventlistener om het duidelijker te maken
+  slider.addEventListener('mousedown', (e) =>{
+    isDown = true
+    slider.classList.add('active')
+    // dit is de orginele locatie van de muis zodat er niet gereset wordt naar ergens anders in de slider
+    startX = e.pageX - slider.offsetLeft
+    scrollLeft = slider.scrollLeft
+
+
+  })
+  slider.addEventListener('mouseleave', () =>{
+    isDown = false
+    slider.classList.remove('active')
+
+
+})
+slider.addEventListener('mouseup', () =>{
+  isDown = false
+  slider.classList.remove('active')
+
+
+})
+slider.addEventListener('mousemove', (e) =>{
+  //stopt de functie als isDown false is
+  if(!isDown) return
+  //zorgt dat je niet per ongeluk tekst selecteert ipv slide
+  e.preventDefault()
+  const x = e.pageX - slider.offsetLeft
+  // hoe ver is de muis van het orginele startpunt
+  const walk = x - startX
+  slider.scrollLeft = scrollLeft - walk
+})
 </script>
 
   </body>
